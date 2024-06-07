@@ -1,0 +1,67 @@
+package softwaretesting;
+
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
+import org.junit.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.edge.EdgeDriver;
+import io.github.bonigarcia.wdm.WebDriverManager;
+public class flipkarttesting {
+public static WebDriver driver;
+	
+    @Test
+    
+	public void Browser() throws InterruptedException {
+    	//Launch Browser
+		WebDriverManager.edgedriver().setup();
+		EdgeDriver driver = new EdgeDriver();
+		
+	   // Enter URL
+	   driver.navigate().to("https://www.flipkart.com/");
+	   
+	    //Implicit Wait
+	    driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+	    
+	    //Maximize
+	       driver.manage().window().maximize();
+	       
+	       //Search input
+	       WebElement searchinput =driver.findElement(By.xpath("//*[@id=\"container\"]/div/div[1]/div/div/div/div/div[1]/div/div[1]/div/div[1]/div[1]/header/div[1]/div[2]/form/div/div/input"));
+	       searchinput.sendKeys("iphone");
+	       searchinput.sendKeys(Keys.ENTER);
+	       
+	       //Window Handle
+	       String mainPage = driver.getWindowHandle();
+	       System.out.println("Main page="+ mainPage);
+	       
+	       driver.findElement(By.xpath("//*[@id=\"container\"]/div/div[3]/div[1]/div[2]/div[3]/div/div/div/a/div[3]/div[1]/div[1]")).click();
+	       Set<String> allpages=driver.getWindowHandles();
+	       for(String page : allpages) {
+	    	   if(!page.equals(mainPage)) {
+	    		   driver.switchTo().window(page);
+	    		   break;
+	    	   }
+	       }
+	       System.out.println(driver.getCurrentUrl());
+	       
+	       //check HighLights
+	       List<WebElement> products = driver.findElements(By.className("_7eSDEz"));
+	       System.out.println(products.size());
+	       for(WebElement product: products) {
+	    	   System.out.println(product.getText());
+	       }
+	       
+	       //Click BuyNow   
+	       WebElement buynow = driver.findElement(By.xpath("//button[@class='QqFHMw vslbG+ _3Yl67G _7Pd1Fp']"));
+	       buynow.click();
+	     
+	      //Quit
+	      driver.quit();
+	     
+	     }
+
+}
